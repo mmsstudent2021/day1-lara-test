@@ -1,8 +1,29 @@
 @extends("master")
 @section("title") Home Page @endsection
+
+
 @section('content')
-    <h1>Home Page</h1>
-    <p>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid aperiam beatae dolorem est nihil odit officiis praesentium, provident saepe sunt suscipit, tempora. Aperiam illum maxime minus mollitia nam qui sequi!
-    </p>
+    <div class="p-3">
+        <h1>Home Page</h1>
+
+        <form method="post" action="{{ route('exchange-to-mmk') }}" enctype="multipart/form-data">
+            @csrf
+            <div class="mb-3">
+                <input type="file" class="form-control" name="photo">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Amount</label>
+                <input type="text" class="form-control" name="amount" required>
+            </div>
+            <div class="mb-3">
+                <select @class("form-select") name="currency">
+                    <option value="USD">USD</option>
+                    <option value="SGD">SGD</option>
+                    <option value="EUR">EUR</option>
+                </select>
+            </div>
+            <button class="btn btn-primary">Change</button>
+        </form>
+    </div>
 @endsection
+
