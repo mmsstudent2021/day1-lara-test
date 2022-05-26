@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Http;
 use App\Http\Controllers\FirstController;
+use App\Http\Controllers\ExchangeController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -95,22 +96,12 @@ Route::post("/exchange-to-mmk",[FirstController::class,'exchangeToMMK'])->name('
 
 Route::get("/run",[FirstController::class,'run']);
 
-Route::get(
-    "/exchange/from/{amount}/{fromCurrency}/to/{toCurrency}",
-    function ($amount,$fromCurrency,$toCurrency){
+Route::post(
+    "/exchange",
+    [ExchangeController::class,'exchange']
+)->name("exchange");
 
-        $rates = Http::get("http://forex.cbm.gov.mm/api/latest")->object()->rates;
-        $fromCurrencyRate = str_replace(",","",$rates->{strtoupper($fromCurrency)});
-        $toCurrencyRate = str_replace(",","",$rates->{strtoupper($toCurrency)});
-
-        //FromCurrency to mmk
-        $mmk = $amount * $fromCurrencyRate;
-
-        //mmk to ToCurrency
-        return round($mmk / $toCurrencyRate,2).$toCurrency;
-
-    }
-);
+Route::view("/exchange-calculator","exchange")->name('exchange-calculator');
 
 
 
