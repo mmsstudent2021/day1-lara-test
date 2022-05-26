@@ -95,6 +95,23 @@ Route::post("/exchange-to-mmk",[FirstController::class,'exchangeToMMK'])->name('
 
 Route::get("/run",[FirstController::class,'run']);
 
+Route::get(
+    "/exchange/from/{amount}/{fromCurrency}/to/{toCurrency}",
+    function ($amount,$fromCurrency,$toCurrency){
+
+        $rates = Http::get("http://forex.cbm.gov.mm/api/latest")->object()->rates;
+        $fromCurrencyRate = str_replace(",","",$rates->{strtoupper($fromCurrency)});
+        $toCurrencyRate = str_replace(",","",$rates->{strtoupper($toCurrency)});
+
+        //FromCurrency to mmk
+        $mmk = $amount * $fromCurrencyRate;
+
+        //mmk to ToCurrency
+        return round($mmk / $toCurrencyRate,2).$toCurrency;
+
+    }
+);
+
 
 
 
